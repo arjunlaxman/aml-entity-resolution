@@ -366,4 +366,24 @@ System: AML Multi-Hop Entity Resolution v2.0
                                 : 'bg-green-500/20 text-green-300'
                             }`
                           },
-                            entity.risk > 0.7 ? 'High Risk
+                            entity.risk > 0.7 ? 'High Risk' : entity.risk > 0.4 ? 'Medium Risk' : 'Low Risk'
+                          )
+                        )
+                      )
+                    )
+                )
+              )
+            ) :
+            React.createElement('div', { className: "bg-slate-800/50 backdrop-blur-sm border border-blue-500/30 rounded-lg p-12 text-center" },
+              React.createElement(Network, { className: "w-16 h-16 text-gray-600 mx-auto mb-4" }),
+              React.createElement('p', { className: "text-gray-400" }, "Select an anomaly to view details")
+            )
+        )
+      )
+    )
+  );
+};
+
+ReactDOM.createRoot(document.getElementById('root')).render(
+  React.createElement(AMLMonitoringSystem)
+);
