@@ -5,14 +5,13 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="Advanced Anti-Money Laundering system using Graph Neural Networks for detecting illicit fund flows">
     <meta name="author" content="Arjun Laxman">
-    <meta name="keywords" content="AML, Graph Neural Networks, PyTorch, Financial Fraud Detection, Machine Learning, SHAP, Explainable AI">
     <title>AML Neural Monitor | Advanced Graph-Based Detection System</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
     <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
     
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600;700&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
         
         * {
             margin: 0;
@@ -27,35 +26,10 @@
             overflow-x: hidden;
         }
         
-        .font-mono {
-            font-family: 'JetBrains Mono', monospace;
+        @keyframes spin {
+            to { transform: rotate(360deg); }
         }
         
-        /* Smooth scrolling */
-        html {
-            scroll-behavior: smooth;
-        }
-        
-        /* Custom scrollbar */
-        ::-webkit-scrollbar {
-            width: 8px;
-            height: 8px;
-        }
-        
-        ::-webkit-scrollbar-track {
-            background: rgba(15, 23, 42, 0.5);
-        }
-        
-        ::-webkit-scrollbar-thumb {
-            background: linear-gradient(to bottom, #3b82f6, #8b5cf6);
-            border-radius: 4px;
-        }
-        
-        ::-webkit-scrollbar-thumb:hover {
-            background: linear-gradient(to bottom, #2563eb, #7c3aed);
-        }
-        
-        /* Animations */
         @keyframes pulse-glow {
             0%, 100% { 
                 opacity: 0.5;
@@ -78,31 +52,10 @@
             }
         }
         
-        @keyframes float {
-            0%, 100% { transform: translateY(0px); }
-            50% { transform: translateY(-10px); }
-        }
-        
         @keyframes gradient-shift {
             0% { background-position: 0% 50%; }
             50% { background-position: 100% 50%; }
             100% { background-position: 0% 50%; }
-        }
-        
-        @keyframes spin {
-            to { transform: rotate(360deg); }
-        }
-        
-        @keyframes border-flow {
-            0%, 100% { border-color: rgba(59, 130, 246, 0.5); }
-            25% { border-color: rgba(168, 85, 247, 0.5); }
-            50% { border-color: rgba(239, 68, 68, 0.5); }
-            75% { border-color: rgba(34, 197, 94, 0.5); }
-        }
-        
-        @keyframes shimmer {
-            0% { background-position: -1000px 0; }
-            100% { background-position: 1000px 0; }
         }
         
         .animate-spin {
@@ -113,16 +66,8 @@
             animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
         }
         
-        .animate-pulse-glow {
-            animation: pulse-glow 2s ease-in-out infinite;
-        }
-        
         .animate-slide-in {
             animation: slide-in 0.5s ease-out;
-        }
-        
-        .animate-float {
-            animation: float 3s ease-in-out infinite;
         }
         
         .animate-gradient {
@@ -130,200 +75,22 @@
             animation: gradient-shift 3s ease infinite;
         }
         
-        .animate-border-flow {
-            animation: border-flow 3s ease-in-out infinite;
+        /* Custom scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
         }
         
-        /* Glassmorphism effects */
-        .glass {
+        ::-webkit-scrollbar-track {
             background: rgba(15, 23, 42, 0.5);
-            backdrop-filter: blur(12px);
-            -webkit-backdrop-filter: blur(12px);
-            border: 1px solid rgba(71, 85, 105, 0.2);
         }
         
-        .glass-dark {
-            background: rgba(15, 23, 42, 0.8);
-            backdrop-filter: blur(16px);
-            -webkit-backdrop-filter: blur(16px);
-            border: 1px solid rgba(71, 85, 105, 0.3);
+        ::-webkit-scrollbar-thumb {
+            background: linear-gradient(to bottom, #3b82f6, #8b5cf6);
+            border-radius: 4px;
         }
         
-        /* Neon glow effects */
-        .neon-blue {
-            box-shadow: 0 0 20px rgba(59, 130, 246, 0.5),
-                        0 0 40px rgba(59, 130, 246, 0.3),
-                        0 0 60px rgba(59, 130, 246, 0.1);
-        }
-        
-        .neon-purple {
-            box-shadow: 0 0 20px rgba(168, 85, 247, 0.5),
-                        0 0 40px rgba(168, 85, 247, 0.3),
-                        0 0 60px rgba(168, 85, 247, 0.1);
-        }
-        
-        .neon-red {
-            box-shadow: 0 0 20px rgba(239, 68, 68, 0.5),
-                        0 0 40px rgba(239, 68, 68, 0.3),
-                        0 0 60px rgba(239, 68, 68, 0.1);
-        }
-        
-        /* Hover effects */
-        .hover-lift {
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-        }
-        
-        .hover-lift:hover {
-            transform: translateY(-4px);
-            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.3);
-        }
-        
-        /* Loading skeleton */
-        .skeleton {
-            background: linear-gradient(90deg, 
-                rgba(71, 85, 105, 0.2) 25%, 
-                rgba(71, 85, 105, 0.3) 50%, 
-                rgba(71, 85, 105, 0.2) 75%);
-            background-size: 200% 100%;
-            animation: shimmer 1.5s infinite;
-        }
-        
-        /* Gradient text */
-        .gradient-text {
-            background: linear-gradient(to right, #3b82f6, #8b5cf6);
-            -webkit-background-clip: text;
-            background-clip: text;
-            -webkit-text-fill-color: transparent;
-        }
-        
-        /* Particle background */
-        .particles {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            pointer-events: none;
-            overflow: hidden;
-            z-index: 0;
-        }
-        
-        .particle {
-            position: absolute;
-            display: block;
-            pointer-events: none;
-            width: 2px;
-            height: 2px;
-            background: rgba(59, 130, 246, 0.4);
-            box-shadow: 0 0 6px rgba(59, 130, 246, 0.4);
-            animation: particle-float 20s infinite;
-        }
-        
-        @keyframes particle-float {
-            from {
-                transform: translateY(100vh) translateX(0);
-                opacity: 0;
-            }
-            10% {
-                opacity: 1;
-            }
-            90% {
-                opacity: 1;
-            }
-            to {
-                transform: translateY(-10vh) translateX(100px);
-                opacity: 0;
-            }
-        }
-        
-        /* Grid background */
-        .grid-bg {
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background-image: 
-                linear-gradient(rgba(59, 130, 246, 0.1) 1px, transparent 1px),
-                linear-gradient(90deg, rgba(59, 130, 246, 0.1) 1px, transparent 1px);
-            background-size: 50px 50px;
-            opacity: 0.3;
-            z-index: 0;
-        }
-        
-        /* Responsive design improvements */
-        @media (max-width: 768px) {
-            .glass {
-                backdrop-filter: blur(8px);
-                -webkit-backdrop-filter: blur(8px);
-            }
-        }
-        
-        /* Print styles */
-        @media print {
-            body {
-                background: white;
-                color: black;
-            }
-            
-            .glass, .glass-dark {
-                background: white;
-                border: 1px solid #e5e7eb;
-            }
-            
-            .no-print {
-                display: none;
-            }
-        }
-        
-        /* Focus styles for accessibility */
-        *:focus-visible {
-            outline: 2px solid #3b82f6;
-            outline-offset: 2px;
-        }
-        
-        /* Reduced motion support */
-        @media (prefers-reduced-motion: reduce) {
-            *, *::before, *::after {
-                animation-duration: 0.01ms !important;
-                animation-iteration-count: 1 !important;
-                transition-duration: 0.01ms !important;
-            }
-        }
-        
-        /* High contrast mode support */
-        @media (prefers-contrast: high) {
-            .glass {
-                background: rgba(0, 0, 0, 0.9);
-                border: 2px solid white;
-            }
-        }
-        
-        /* Custom card hover effect */
-        .card-hover {
-            position: relative;
-            overflow: hidden;
-        }
-        
-        .card-hover::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: -100%;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(90deg, 
-                transparent, 
-                rgba(255, 255, 255, 0.05), 
-                transparent);
-            transition: left 0.5s;
-        }
-        
-        .card-hover:hover::before {
-            left: 100%;
-        }
-        
-        /* Loading state */
+        /* Loading dots */
         .loading-dots {
             display: inline-flex;
             gap: 4px;
@@ -358,16 +125,9 @@
     </style>
 </head>
 <body>
-    <!-- Grid Background -->
-    <div class="grid-bg"></div>
+    <div id="root"></div>
     
-    <!-- Particle Effects -->
-    <div class="particles" id="particles"></div>
-    
-    <!-- Main App Container -->
-    <div id="root" class="relative z-10"></div>
-    
-    <!-- Loading Screen (shown initially) -->
+    <!-- Loading Screen -->
     <div id="loading-screen" class="fixed inset-0 z-50 flex items-center justify-center bg-slate-900">
         <div class="text-center">
             <div class="relative inline-block">
@@ -379,7 +139,7 @@
                     </svg>
                 </div>
             </div>
-            <h2 class="mt-6 text-2xl font-bold gradient-text">AML Neural Monitor</h2>
+            <h2 class="mt-6 text-2xl font-bold bg-gradient-to-r from-blue-400 to-purple-400 bg-clip-text text-transparent">AML Neural Monitor</h2>
             <p class="mt-2 text-gray-400">Initializing Graph Neural Networks...</p>
             <div class="loading-dots mt-4 text-blue-500">
                 <span></span>
@@ -389,107 +149,395 @@
         </div>
     </div>
     
-    <!-- Load the enhanced app -->
-    <script src="app-enhanced.js"></script>
-    
     <script>
-        // Generate particle effects
-        function createParticles() {
-            const particlesContainer = document.getElementById('particles');
-            const particleCount = 50;
+        const { useState, useEffect, useRef } = React;
+
+        // Icon Components
+        const AlertCircle = ({ className }) => React.createElement('svg', { className, fill: "none", viewBox: "0 0 24 24", stroke: "currentColor" },
+          React.createElement('path', { strokeLinecap: "round", strokeLinejoin: "round", strokeWidth: 2, d: "M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" })
+        );
+
+        const TrendingUp = ({ className }) => React.createElement('svg', { className, fill: "none", viewBox: "0 0 24 24", stroke: "currentColor" },
+          React.createElement('path', { strokeLinecap: "round", strokeLinejoin: "round", strokeWidth: 2, d: "M13 7h8m0 0v8m0-8l-8 8-4-4-6 6" })
+        );
+
+        const Network = ({ className }) => React.createElement('svg', { className, fill: "none", viewBox: "0 0 24 24", stroke: "currentColor" },
+          React.createElement('circle', { cx: "12", cy: "12", r: "3", strokeWidth: 2 }),
+          React.createElement('circle', { cx: "6", cy: "6", r: "2", strokeWidth: 2 }),
+          React.createElement('circle', { cx: "18", cy: "6", r: "2", strokeWidth: 2 }),
+          React.createElement('circle', { cx: "6", cy: "18", r: "2", strokeWidth: 2 }),
+          React.createElement('circle', { cx: "18", cy: "18", r: "2", strokeWidth: 2 }),
+          React.createElement('path', { strokeLinecap: "round", strokeWidth: 2, d: "M9 9l6 6M9 15l6-6" })
+        );
+
+        const FileText = ({ className }) => React.createElement('svg', { className, fill: "none", viewBox: "0 0 24 24", stroke: "currentColor" },
+          React.createElement('path', { strokeLinecap: "round", strokeLinejoin: "round", strokeWidth: 2, d: "M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" })
+        );
+
+        const Play = ({ className }) => React.createElement('svg', { className, fill: "none", viewBox: "0 0 24 24", stroke: "currentColor" },
+          React.createElement('path', { strokeLinecap: "round", strokeLinejoin: "round", strokeWidth: 2, d: "M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z" }),
+          React.createElement('path', { strokeLinecap: "round", strokeLinejoin: "round", strokeWidth: 2, d: "M21 12a9 9 0 11-18 0 9 9 0 0118 0z" })
+        );
+
+        const RefreshCw = ({ className }) => React.createElement('svg', { className, fill: "none", viewBox: "0 0 24 24", stroke: "currentColor" },
+          React.createElement('path', { strokeLinecap: "round", strokeLinejoin: "round", strokeWidth: 2, d: "M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" })
+        );
+
+        const Shield = ({ className }) => React.createElement('svg', { className, fill: "none", viewBox: "0 0 24 24", stroke: "currentColor" },
+          React.createElement('path', { strokeLinecap: "round", strokeLinejoin: "round", strokeWidth: 2, d: "M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" })
+        );
+
+        // Main Component
+        const AMLMonitoringSystem = () => {
+          const [transactionGraph, setTransactionGraph] = useState(null);
+          const [anomalies, setAnomalies] = useState([]);
+          const [selectedCase, setSelectedCase] = useState(null);
+          const [isAnalyzing, setIsAnalyzing] = useState(false);
+          const [activeView, setActiveView] = useState('overview');
+
+          const generateTransactionGraph = () => {
+            const entities = [
+              { id: 'E1', name: 'Account_Alpha', type: 'personal', risk: 0.22, country: 'US' },
+              { id: 'E2', name: 'ShellCo_Beta', type: 'shell', risk: 0.89, country: 'KY' },
+              { id: 'E3', name: 'Account_Gamma', type: 'personal', risk: 0.31, country: 'US' },
+              { id: 'E4', name: 'OffshoreHolding_Delta', type: 'shell', risk: 0.94, country: 'PA' },
+              { id: 'E5', name: 'Account_Epsilon', type: 'personal', risk: 0.15, country: 'UK' },
+              { id: 'E6', name: 'TradingCo_Zeta', type: 'business', risk: 0.48, country: 'SG' },
+              { id: 'E7', name: 'Account_Theta', type: 'personal', risk: 0.76, country: 'RU' },
+              { id: 'E8', name: 'CryptoExchange_Iota', type: 'business', risk: 0.68, country: 'MT' },
+            ];
+
+            const transactions = [
+              { from: 'E1', to: 'E2', amount: 50000, timestamp: '2024-01-15 09:30', suspicious: true },
+              { from: 'E2', to: 'E4', amount: 48500, timestamp: '2024-01-16 14:22', suspicious: true },
+              { from: 'E4', to: 'E6', amount: 47000, timestamp: '2024-01-17 11:45', suspicious: true },
+              { from: 'E3', to: 'E2', amount: 35000, timestamp: '2024-01-18 16:10', suspicious: true },
+              { from: 'E5', to: 'E6', amount: 15000, timestamp: '2024-01-19 10:05', suspicious: false },
+              { from: 'E6', to: 'E7', amount: 25000, timestamp: '2024-01-20 13:30', suspicious: true },
+              { from: 'E7', to: 'E8', amount: 24000, timestamp: '2024-01-21 08:45', suspicious: true },
+              { from: 'E1', to: 'E3', amount: 8000, timestamp: '2024-01-22 12:00', suspicious: false },
+            ];
+
+            return { entities, transactions };
+          };
+
+          const detectAnomalies = (graph) => {
+            const detected = [];
             
-            for (let i = 0; i < particleCount; i++) {
-                const particle = document.createElement('div');
-                particle.className = 'particle';
-                particle.style.left = Math.random() * 100 + '%';
-                particle.style.animationDelay = Math.random() * 20 + 's';
-                particle.style.animationDuration = (15 + Math.random() * 10) + 's';
-                particlesContainer.appendChild(particle);
-            }
-        }
-        
-        // Initialize particles
-        createParticles();
-        
-        // Hide loading screen after app loads
-        window.addEventListener('load', () => {
+            const pattern1 = {
+              id: 'A1',
+              type: 'Complex Layering Scheme',
+              severity: 'Critical',
+              riskScore: 0.93,
+              confidence: 0.87,
+              entities: ['E1', 'E2', 'E4', 'E6'],
+              totalAmount: 145500,
+              hops: 3,
+              description: 'Sophisticated fund layering through multiple shell companies',
+              indicators: [
+                'Sequential transactions within 72 hours',
+                'Multiple shell company intermediaries',
+                'Amount decay pattern (2-3% per hop)',
+                'Cross-border entities involved',
+                'High-risk jurisdictions detected'
+              ],
+              explanation: {
+                graphStructure: 'Linear chain with 3 high-risk nodes',
+                temporalPattern: 'Rapid succession with 24-48hr intervals',
+                amountPattern: 'Structured below CTR threshold',
+                entityRisk: 'Shell companies with minimal KYC'
+              }
+            };
+
+            const pattern2 = {
+              id: 'A2',
+              type: 'Smurfing & Aggregation',
+              severity: 'High',
+              riskScore: 0.78,
+              confidence: 0.92,
+              entities: ['E3', 'E2', 'E7', 'E8'],
+              totalAmount: 84000,
+              hops: 3,
+              description: 'Multiple small deposits aggregated and moved to crypto',
+              indicators: [
+                'Multiple source accounts',
+                'Aggregation at intermediary',
+                'Final movement to crypto exchange',
+                'Amounts below reporting threshold',
+                'Coordinated timing pattern'
+              ],
+              explanation: {
+                graphStructure: 'Convergence pattern detected',
+                temporalPattern: 'Coordinated timing',
+                amountPattern: 'Structured deposits',
+                entityRisk: 'Crypto exchange endpoint'
+              }
+            };
+
+            detected.push(pattern1, pattern2);
+            return detected;
+          };
+
+          const runAnalysis = () => {
+            setIsAnalyzing(true);
             setTimeout(() => {
-                const loadingScreen = document.getElementById('loading-screen');
-                loadingScreen.style.transition = 'opacity 0.5s';
-                loadingScreen.style.opacity = '0';
-                setTimeout(() => {
-                    loadingScreen.style.display = 'none';
-                }, 500);
+              const graph = generateTransactionGraph();
+              setTransactionGraph(graph);
+              const detected = detectAnomalies(graph);
+              setAnomalies(detected);
+              setIsAnalyzing(false);
+              setSelectedCase(detected[0]);
             }, 1500);
-        });
-        
-        // Add keyboard shortcuts
-        document.addEventListener('keydown', (e) => {
-            // Press 'R' to refresh analysis
-            if (e.key === 'r' && !e.ctrlKey && !e.metaKey) {
-                const runButton = document.querySelector('button[disabled], button:not([disabled])');
-                if (runButton && !runButton.disabled) {
-                    runButton.click();
-                }
-            }
+          };
+
+          useEffect(() => {
+            runAnalysis();
+          }, []);
+
+          const downloadReport = () => {
+            const report = `
+ANTI-MONEY LAUNDERING CASE REPORT
+═══════════════════════════════════════════════════════════════════════
+Case ID: ${selectedCase.id}
+Type: ${selectedCase.type}
+Risk Score: ${(selectedCase.riskScore * 100).toFixed(1)}%
+Severity: ${selectedCase.severity}
+
+EXECUTIVE SUMMARY
+─────────────────────────────────────────────────────────────────────
+${selectedCase.description}
+
+Total Amount: $${selectedCase.totalAmount.toLocaleString()}
+Transaction Hops: ${selectedCase.hops}
+Entities Involved: ${selectedCase.entities.join(', ')}
+
+DETECTION INDICATORS
+─────────────────────────────────────────────────────────────────────
+${selectedCase.indicators.map((ind, idx) => `${idx + 1}. ${ind}`).join('\n')}
+
+RECOMMENDED ACTIONS
+─────────────────────────────────────────────────────────────────────
+1. File Suspicious Activity Report (SAR)
+2. Freeze associated accounts
+3. Initiate enhanced due diligence
+4. Contact cross-border financial intelligence units
+
+═══════════════════════════════════════════════════════════════════════
+Generated: ${new Date().toISOString()}
+System: AML Neural Monitor v3.2.1
+═══════════════════════════════════════════════════════════════════════
+`;
+            const blob = new Blob([report], { type: 'text/plain' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `AML_Report_${selectedCase.id}_${Date.now()}.txt`;
+            a.click();
+          };
+
+          return React.createElement('div', { className: "min-h-screen bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900" },
+            // Header
+            React.createElement('header', { className: "bg-slate-900/80 backdrop-blur-xl border-b border-slate-700/50" },
+              React.createElement('div', { className: "max-w-7xl mx-auto px-4 sm:px-6 lg:px-8" },
+                React.createElement('div', { className: "flex items-center justify-between py-6" },
+                  React.createElement('div', { className: "flex items-center gap-4" },
+                    React.createElement(Shield, { className: "w-10 h-10 text-blue-500" }),
+                    React.createElement('div', null,
+                      React.createElement('h1', { className: "text-3xl font-bold text-white" }, "AML Neural Monitor"),
+                      React.createElement('p', { className: "text-sm text-gray-400" }, "Graph Neural Network Detection System")
+                    )
+                  ),
+                  React.createElement('div', { className: "flex items-center gap-4" },
+                    React.createElement('button', {
+                      onClick: runAnalysis,
+                      disabled: isAnalyzing,
+                      className: "flex items-center gap-2 bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 disabled:opacity-50 text-white px-6 py-3 rounded-lg font-semibold transition-all"
+                    },
+                      isAnalyzing ? 
+                        React.createElement(RefreshCw, { className: "w-5 h-5 animate-spin" }) :
+                        React.createElement(Play, { className: "w-5 h-5" }),
+                      isAnalyzing ? "Analyzing..." : "Run Analysis"
+                    )
+                  )
+                )
+              )
+            ),
             
-            // Press 'E' to export report
-            if (e.key === 'e' && !e.ctrlKey && !e.metaKey) {
-                const exportButton = Array.from(document.querySelectorAll('button'))
-                    .find(btn => btn.textContent.includes('Export'));
-                if (exportButton) {
-                    exportButton.click();
-                }
-            }
-        });
-        
-        // Performance monitoring
-        if ('performance' in window && 'PerformanceObserver' in window) {
-            const perfObserver = new PerformanceObserver((list) => {
-                for (const entry of list.getEntries()) {
-                    if (entry.entryType === 'largest-contentful-paint') {
-                        console.log('LCP:', entry.startTime);
-                    }
-                }
-            });
-            perfObserver.observe({ entryTypes: ['largest-contentful-paint'] });
-        }
-        
-        // Smooth scroll behavior for internal links
-        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-            anchor.addEventListener('click', function (e) {
-                e.preventDefault();
-                const target = document.querySelector(this.getAttribute('href'));
-                if (target) {
-                    target.scrollIntoView({
-                        behavior: 'smooth',
-                        block: 'start'
-                    });
-                }
-            });
-        });
-        
-        // Add resize observer for responsive behavior
-        if ('ResizeObserver' in window) {
-            const resizeObserver = new ResizeObserver(entries => {
-                for (const entry of entries) {
-                    // Adjust canvas size for network visualization
-                    const canvas = entry.target.querySelector('canvas');
-                    if (canvas) {
-                        canvas.width = entry.contentRect.width;
-                        canvas.height = entry.contentRect.height;
-                    }
-                }
-            });
+            // Navigation
+            React.createElement('div', { className: "bg-slate-800/50 border-b border-slate-700/50" },
+              React.createElement('div', { className: "max-w-7xl mx-auto px-4 sm:px-6 lg:px-8" },
+                React.createElement('div', { className: "flex gap-6 py-4 overflow-x-auto" },
+                  ['overview', 'network', 'timeline'].map(view =>
+                    React.createElement('button', {
+                      key: view,
+                      onClick: () => setActiveView(view),
+                      className: `px-4 py-2 rounded-lg font-medium transition-all ${
+                        activeView === view 
+                          ? 'bg-gradient-to-r from-blue-600 to-purple-600 text-white' 
+                          : 'text-gray-400 hover:text-white hover:bg-slate-700'
+                      }`
+                    }, view.charAt(0).toUpperCase() + view.slice(1))
+                  )
+                )
+              )
+            ),
             
-            // Observe the root element
+            // Main Content
+            React.createElement('div', { className: "max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8" },
+              // Stats Cards
+              React.createElement('div', { className: "grid grid-cols-1 md:grid-cols-4 gap-6 mb-8" },
+                [
+                  { label: 'Transactions', value: transactionGraph?.transactions.length || 0, color: 'from-blue-600 to-cyan-600' },
+                  { label: 'Anomalies', value: anomalies.length, color: 'from-red-600 to-orange-600' },
+                  { label: 'Entities', value: transactionGraph?.entities.length || 0, color: 'from-purple-600 to-pink-600' },
+                  { label: 'Risk Level', value: 'HIGH', color: 'from-yellow-600 to-red-600' }
+                ].map((stat, idx) =>
+                  React.createElement('div', { 
+                    key: idx,
+                    className: "bg-slate-800/50 backdrop-blur-xl border border-slate-700/50 rounded-xl p-6" 
+                  },
+                    React.createElement('div', { className: `text-3xl font-bold bg-gradient-to-r ${stat.color} bg-clip-text text-transparent mb-2` }, 
+                      stat.value
+                    ),
+                    React.createElement('div', { className: "text-gray-400" }, stat.label)
+                  )
+                )
+              ),
+              
+              // Main Grid
+              React.createElement('div', { className: "grid grid-cols-1 lg:grid-cols-3 gap-6" },
+                // Anomaly List
+                React.createElement('div', { className: "lg:col-span-1" },
+                  React.createElement('div', { className: "bg-slate-800/50 backdrop-blur-xl border border-slate-700/50 rounded-xl p-6" },
+                    React.createElement('h2', { className: "text-xl font-bold text-white mb-4 flex items-center gap-2" },
+                      React.createElement(AlertCircle, { className: "w-5 h-5 text-red-400" }),
+                      "Detected Anomalies"
+                    ),
+                    React.createElement('div', { className: "space-y-3" },
+                      anomalies.map((anomaly) =>
+                        React.createElement('div', {
+                          key: anomaly.id,
+                          onClick: () => setSelectedCase(anomaly),
+                          className: `p-4 rounded-lg cursor-pointer transition-all ${
+                            selectedCase?.id === anomaly.id
+                              ? 'bg-gradient-to-r from-blue-600 to-purple-600'
+                              : 'bg-slate-700/50 hover:bg-slate-700'
+                          }`
+                        },
+                          React.createElement('div', { className: "flex items-start justify-between mb-2" },
+                            React.createElement('span', { className: "text-white font-semibold" }, anomaly.type),
+                            React.createElement('span', {
+                              className: `px-2 py-1 rounded text-xs font-bold ${
+                                anomaly.severity === 'Critical' ? 'bg-red-500 text-white' : 'bg-yellow-500 text-black'
+                              }`
+                            }, anomaly.severity)
+                          ),
+                          React.createElement('div', { className: "text-sm text-gray-300 mb-2" }, anomaly.description),
+                          React.createElement('div', { className: "flex items-center justify-between text-xs" },
+                            React.createElement('span', { className: "text-gray-400" }, `$${anomaly.totalAmount.toLocaleString()}`),
+                            React.createElement('span', { className: "text-red-400 font-semibold" }, `Risk: ${(anomaly.riskScore * 100).toFixed(0)}%`)
+                          )
+                        )
+                      )
+                    )
+                  )
+                ),
+                
+                // Details Panel
+                React.createElement('div', { className: "lg:col-span-2" },
+                  selectedCase ? React.createElement('div', { className: "bg-slate-800/50 backdrop-blur-xl border border-slate-700/50 rounded-xl p-6" },
+                    React.createElement('div', { className: "flex items-start justify-between mb-6" },
+                      React.createElement('div', null,
+                        React.createElement('h2', { className: "text-2xl font-bold text-white mb-2" }, selectedCase.type),
+                        React.createElement('p', { className: "text-gray-300" }, selectedCase.description)
+                      ),
+                      React.createElement('button', {
+                        onClick: downloadReport,
+                        className: "flex items-center gap-2 bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-lg transition-colors"
+                      },
+                        React.createElement(FileText, { className: "w-5 h-5" }),
+                        "Export Report"
+                      )
+                    ),
+                    
+                    React.createElement('div', { className: "grid grid-cols-1 sm:grid-cols-3 gap-4 mb-6" },
+                      React.createElement('div', { className: "bg-slate-700/50 rounded-lg p-4" },
+                        React.createElement('div', { className: "text-gray-400 text-sm mb-1" }, "Risk Score"),
+                        React.createElement('div', { className: "text-2xl font-bold text-red-400" }, `${(selectedCase.riskScore * 100).toFixed(1)}%`)
+                      ),
+                      React.createElement('div', { className: "bg-slate-700/50 rounded-lg p-4" },
+                        React.createElement('div', { className: "text-gray-400 text-sm mb-1" }, "Total Amount"),
+                        React.createElement('div', { className: "text-2xl font-bold text-white" }, `$${selectedCase.totalAmount.toLocaleString()}`)
+                      ),
+                      React.createElement('div', { className: "bg-slate-700/50 rounded-lg p-4" },
+                        React.createElement('div', { className: "text-gray-400 text-sm mb-1" }, "Confidence"),
+                        React.createElement('div', { className: "text-2xl font-bold text-blue-400" }, `${(selectedCase.confidence * 100).toFixed(0)}%`)
+                      )
+                    ),
+                    
+                    React.createElement('div', null,
+                      React.createElement('h3', { className: "text-lg font-semibold text-white mb-3 flex items-center gap-2" },
+                        React.createElement(TrendingUp, { className: "w-5 h-5 text-yellow-400" }),
+                        "Detection Indicators"
+                      ),
+                      React.createElement('div', { className: "space-y-2" },
+                        selectedCase.indicators.map((indicator, idx) =>
+                          React.createElement('div', {
+                            key: idx,
+                            className: "bg-slate-700/30 border border-slate-600 rounded p-3 text-gray-300"
+                          },
+                            React.createElement('span', { className: "text-yellow-400 font-semibold mr-2" }, "•"),
+                            indicator
+                          )
+                        )
+                      )
+                    ),
+                    
+                    React.createElement('div', { className: "mt-6" },
+                      React.createElement('h3', { className: "text-lg font-semibold text-white mb-3 flex items-center gap-2" },
+                        React.createElement(Network, { className: "w-5 h-5 text-purple-400" }),
+                        "Graph Neural Network Analysis"
+                      ),
+                      React.createElement('div', { className: "grid grid-cols-1 sm:grid-cols-2 gap-4" },
+                        Object.entries(selectedCase.explanation).map(([key, value]) =>
+                          React.createElement('div', {
+                            key: key,
+                            className: "bg-gradient-to-br from-purple-900/30 to-blue-900/30 border border-purple-500/30 rounded-lg p-4"
+                          },
+                            React.createElement('div', { className: "text-purple-300 text-sm font-semibold mb-1" },
+                              key.replace(/([A-Z])/g, ' $1').trim()
+                            ),
+                            React.createElement('div', { className: "text-white" }, value)
+                          )
+                        )
+                      )
+                    )
+                  ) : React.createElement('div', { className: "bg-slate-800/50 backdrop-blur-xl border border-slate-700/50 rounded-xl p-12 text-center" },
+                    React.createElement(Shield, { className: "w-16 h-16 text-gray-600 mx-auto mb-4" }),
+                    React.createElement('h3', { className: "text-xl font-semibold text-gray-400 mb-2" }, "No Case Selected"),
+                    React.createElement('p', { className: "text-gray-500" }, "Select an anomaly from the list to view detailed analysis")
+                  )
+                )
+              )
+            )
+          );
+        };
+
+        // Mount the app
+        const root = ReactDOM.createRoot(document.getElementById('root'));
+        root.render(React.createElement(AMLMonitoringSystem));
+        
+        // Hide loading screen
+        window.addEventListener('load', () => {
+          setTimeout(() => {
+            const loadingScreen = document.getElementById('loading-screen');
+            loadingScreen.style.transition = 'opacity 0.5s';
+            loadingScreen.style.opacity = '0';
             setTimeout(() => {
-                const root = document.getElementById('root');
-                if (root) {
-                    resizeObserver.observe(root);
-                }
-            }, 2000);
-        }
+              loadingScreen.style.display = 'none';
+            }, 500);
+          }, 1000);
+        });
     </script>
 </body>
 </html>
