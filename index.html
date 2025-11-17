@@ -3,540 +3,691 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Advanced Anti-Money Laundering system using Graph Neural Networks for detecting illicit fund flows">
-    <meta name="author" content="Arjun Laxman">
-    <title>AML Neural Monitor | Advanced Graph-Based Detection System</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
-    <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
-    
+    <title>AML Neural Monitor | Advanced Detection System</title>
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
-        
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
         }
-        
+
         body {
-            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
-            background: #0f172a;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Helvetica', 'Arial', sans-serif;
+            background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
             color: #e2e8f0;
-            overflow-x: hidden;
+            min-height: 100vh;
         }
-        
+
+        .header {
+            background: rgba(15, 23, 42, 0.9);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid rgba(71, 85, 105, 0.3);
+            padding: 1.5rem 2rem;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .header-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .logo-icon {
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(135deg, #3b82f6, #8b5cf6);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+        }
+
+        h1 {
+            font-size: 1.75rem;
+            font-weight: 700;
+            background: linear-gradient(to right, #3b82f6, #8b5cf6);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .subtitle {
+            font-size: 0.875rem;
+            color: #94a3b8;
+            margin-top: 0.25rem;
+        }
+
+        .run-btn {
+            background: linear-gradient(135deg, #3b82f6, #8b5cf6);
+            color: white;
+            border: none;
+            padding: 0.75rem 2rem;
+            border-radius: 0.5rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s;
+            font-size: 1rem;
+        }
+
+        .run-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(59, 130, 246, 0.4);
+        }
+
+        .run-btn:active {
+            transform: translateY(0);
+        }
+
+        .run-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .stat-card {
+            background: rgba(30, 41, 59, 0.5);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(71, 85, 105, 0.3);
+            border-radius: 1rem;
+            padding: 1.5rem;
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+        }
+
+        .stat-value {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+
+        .stat-label {
+            color: #94a3b8;
+            font-size: 0.875rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .main-grid {
+            display: grid;
+            grid-template-columns: 1fr 2fr;
+            gap: 1.5rem;
+            margin-top: 2rem;
+        }
+
+        .panel {
+            background: rgba(30, 41, 59, 0.5);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(71, 85, 105, 0.3);
+            border-radius: 1rem;
+            padding: 1.5rem;
+        }
+
+        .panel-title {
+            font-size: 1.25rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .anomaly-list {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+            max-height: 500px;
+            overflow-y: auto;
+        }
+
+        .anomaly-card {
+            background: rgba(15, 23, 42, 0.5);
+            border: 1px solid rgba(71, 85, 105, 0.3);
+            border-radius: 0.75rem;
+            padding: 1rem;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .anomaly-card:hover {
+            background: rgba(59, 130, 246, 0.1);
+            border-color: rgba(59, 130, 246, 0.5);
+        }
+
+        .anomaly-card.active {
+            background: linear-gradient(135deg, rgba(59, 130, 246, 0.2), rgba(139, 92, 246, 0.2));
+            border-color: #3b82f6;
+        }
+
+        .anomaly-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: start;
+            margin-bottom: 0.5rem;
+        }
+
+        .anomaly-type {
+            font-weight: 600;
+            font-size: 0.95rem;
+        }
+
+        .severity-badge {
+            padding: 0.25rem 0.75rem;
+            border-radius: 9999px;
+            font-size: 0.75rem;
+            font-weight: 700;
+            text-transform: uppercase;
+        }
+
+        .severity-critical {
+            background: #ef4444;
+            color: white;
+            animation: pulse 2s infinite;
+        }
+
+        .severity-high {
+            background: #f97316;
+            color: white;
+        }
+
+        .severity-medium {
+            background: #eab308;
+            color: black;
+        }
+
+        .anomaly-description {
+            color: #94a3b8;
+            font-size: 0.875rem;
+            margin-bottom: 0.75rem;
+        }
+
+        .anomaly-footer {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.875rem;
+        }
+
+        .amount {
+            color: #10b981;
+            font-weight: 600;
+        }
+
+        .risk-score {
+            color: #ef4444;
+            font-weight: 600;
+        }
+
+        .detail-section {
+            margin-bottom: 1.5rem;
+        }
+
+        .detail-title {
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin-bottom: 0.75rem;
+            color: #e2e8f0;
+        }
+
+        .metrics-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .metric-card {
+            background: rgba(15, 23, 42, 0.5);
+            border: 1px solid rgba(71, 85, 105, 0.3);
+            border-radius: 0.75rem;
+            padding: 1rem;
+            text-align: center;
+        }
+
+        .metric-label {
+            font-size: 0.75rem;
+            color: #94a3b8;
+            text-transform: uppercase;
+            margin-bottom: 0.5rem;
+        }
+
+        .metric-value {
+            font-size: 1.5rem;
+            font-weight: 700;
+        }
+
+        .indicator-list {
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+        }
+
+        .indicator {
+            background: rgba(15, 23, 42, 0.5);
+            border-left: 3px solid #fbbf24;
+            padding: 0.75rem;
+            border-radius: 0.25rem;
+            font-size: 0.9rem;
+            color: #cbd5e1;
+        }
+
+        .export-btn {
+            background: linear-gradient(135deg, #10b981, #059669);
+            color: white;
+            border: none;
+            padding: 0.75rem 1.5rem;
+            border-radius: 0.5rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+            margin-top: 1rem;
+        }
+
+        .export-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(16, 185, 129, 0.4);
+        }
+
+        .loading {
+            text-align: center;
+            padding: 3rem;
+            font-size: 1.25rem;
+            color: #64748b;
+        }
+
+        .spinner {
+            display: inline-block;
+            width: 40px;
+            height: 40px;
+            border: 4px solid rgba(59, 130, 246, 0.1);
+            border-top-color: #3b82f6;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin-bottom: 1rem;
+        }
+
         @keyframes spin {
             to { transform: rotate(360deg); }
         }
-        
-        @keyframes pulse-glow {
-            0%, 100% { 
-                opacity: 0.5;
-                transform: scale(1);
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.7; }
+        }
+
+        @media (max-width: 768px) {
+            .main-grid {
+                grid-template-columns: 1fr;
             }
-            50% { 
-                opacity: 1;
-                transform: scale(1.05);
+            
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .metrics-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .header-content {
+                flex-direction: column;
+                gap: 1rem;
             }
         }
-        
-        @keyframes slide-in {
-            from {
-                opacity: 0;
-                transform: translateY(20px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-        
-        @keyframes gradient-shift {
-            0% { background-position: 0% 50%; }
-            50% { background-position: 100% 50%; }
-            100% { background-position: 0% 50%; }
-        }
-        
-        .animate-spin {
-            animation: spin 1s linear infinite;
-        }
-        
-        .animate-pulse {
-            animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
-        }
-        
-        .animate-slide-in {
-            animation: slide-in 0.5s ease-out;
-        }
-        
-        .animate-gradient {
-            background-size: 200% 200%;
-            animation: gradient-shift 3s ease infinite;
-        }
-        
-        /* Custom scrollbar */
+
         ::-webkit-scrollbar {
             width: 8px;
-            height: 8px;
         }
-        
+
         ::-webkit-scrollbar-track {
             background: rgba(15, 23, 42, 0.5);
         }
-        
+
         ::-webkit-scrollbar-thumb {
             background: linear-gradient(to bottom, #3b82f6, #8b5cf6);
             border-radius: 4px;
         }
-        
-        /* Loading dots */
-        .loading-dots {
-            display: inline-flex;
-            gap: 4px;
-        }
-        
-        .loading-dots span {
-            width: 8px;
-            height: 8px;
-            border-radius: 50%;
-            background: currentColor;
-            animation: loading-bounce 1.4s ease-in-out infinite;
-        }
-        
-        .loading-dots span:nth-child(1) {
-            animation-delay: -0.32s;
-        }
-        
-        .loading-dots span:nth-child(2) {
-            animation-delay: -0.16s;
-        }
-        
-        @keyframes loading-bounce {
-            0%, 80%, 100% {
-                transform: scale(0);
-                opacity: 0.5;
-            }
-            40% {
-                transform: scale(1);
-                opacity: 1;
-            }
-        }
     </style>
 </head>
 <body>
-    <div id="root"></div>
-    
-    <!-- Loading Screen -->
-    <div id="loading-screen" class="fixed inset-0 z-50 flex items-center justify-center bg-slate-900">
-        <div class="text-center">
-            <div class="relative inline-block">
-                <div class="w-24 h-24 border-4 border-blue-500 border-t-transparent rounded-full animate-spin"></div>
-                <div class="absolute inset-0 flex items-center justify-center">
-                    <svg class="w-10 h-10 text-blue-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
-                              d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
-                    </svg>
+    <div class="header">
+        <div class="header-content">
+            <div class="logo">
+                <div class="logo-icon">🛡️</div>
+                <div>
+                    <h1>AML Neural Monitor</h1>
+                    <div class="subtitle">Graph Neural Network Detection System v3.2.1</div>
                 </div>
             </div>
-            <h2 class="mt-6 text-2xl font-bold bg-gradient-to-r from-blue-400 to-purple-400 bg-clip-text text-transparent">AML Neural Monitor</h2>
-            <p class="mt-2 text-gray-400">Initializing Graph Neural Networks...</p>
-            <div class="loading-dots mt-4 text-blue-500">
-                <span></span>
-                <span></span>
-                <span></span>
+            <button id="runBtn" class="run-btn" onclick="runAnalysis()">
+                🔍 Run Analysis
+            </button>
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="stats-grid" id="statsGrid">
+            <div class="stat-card">
+                <div class="stat-value" style="background: linear-gradient(to right, #3b82f6, #06b6d4); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent;">
+                    <span id="transactionCount">0</span>
+                </div>
+                <div class="stat-label">Transactions Analyzed</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-value" style="background: linear-gradient(to right, #ef4444, #f97316); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent;">
+                    <span id="anomalyCount">0</span>
+                </div>
+                <div class="stat-label">Anomalies Detected</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-value" style="background: linear-gradient(to right, #8b5cf6, #ec4899); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent;">
+                    <span id="entityCount">0</span>
+                </div>
+                <div class="stat-label">Entities Monitored</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-value" style="background: linear-gradient(to right, #f59e0b, #ef4444); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent;">
+                    <span id="riskLevel">LOW</span>
+                </div>
+                <div class="stat-label">Overall Risk Level</div>
+            </div>
+        </div>
+
+        <div class="main-grid">
+            <div class="panel">
+                <h2 class="panel-title">
+                    ⚠️ Detected Anomalies
+                </h2>
+                <div class="anomaly-list" id="anomalyList">
+                    <div class="loading">
+                        <div class="spinner"></div>
+                        <div>Initializing detection engine...</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="panel">
+                <div id="detailsPanel">
+                    <div class="loading">
+                        <div class="spinner"></div>
+                        <div>Select an anomaly to view details</div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
-    
+
     <script>
-        const { useState, useEffect, useRef } = React;
+        // Data structures
+        let anomalies = [];
+        let selectedAnomaly = null;
+        let transactionGraph = null;
 
-        // Icon Components
-        const AlertCircle = ({ className }) => React.createElement('svg', { className, fill: "none", viewBox: "0 0 24 24", stroke: "currentColor" },
-          React.createElement('path', { strokeLinecap: "round", strokeLinejoin: "round", strokeWidth: 2, d: "M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" })
-        );
-
-        const TrendingUp = ({ className }) => React.createElement('svg', { className, fill: "none", viewBox: "0 0 24 24", stroke: "currentColor" },
-          React.createElement('path', { strokeLinecap: "round", strokeLinejoin: "round", strokeWidth: 2, d: "M13 7h8m0 0v8m0-8l-8 8-4-4-6 6" })
-        );
-
-        const Network = ({ className }) => React.createElement('svg', { className, fill: "none", viewBox: "0 0 24 24", stroke: "currentColor" },
-          React.createElement('circle', { cx: "12", cy: "12", r: "3", strokeWidth: 2 }),
-          React.createElement('circle', { cx: "6", cy: "6", r: "2", strokeWidth: 2 }),
-          React.createElement('circle', { cx: "18", cy: "6", r: "2", strokeWidth: 2 }),
-          React.createElement('circle', { cx: "6", cy: "18", r: "2", strokeWidth: 2 }),
-          React.createElement('circle', { cx: "18", cy: "18", r: "2", strokeWidth: 2 }),
-          React.createElement('path', { strokeLinecap: "round", strokeWidth: 2, d: "M9 9l6 6M9 15l6-6" })
-        );
-
-        const FileText = ({ className }) => React.createElement('svg', { className, fill: "none", viewBox: "0 0 24 24", stroke: "currentColor" },
-          React.createElement('path', { strokeLinecap: "round", strokeLinejoin: "round", strokeWidth: 2, d: "M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" })
-        );
-
-        const Play = ({ className }) => React.createElement('svg', { className, fill: "none", viewBox: "0 0 24 24", stroke: "currentColor" },
-          React.createElement('path', { strokeLinecap: "round", strokeLinejoin: "round", strokeWidth: 2, d: "M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z" }),
-          React.createElement('path', { strokeLinecap: "round", strokeLinejoin: "round", strokeWidth: 2, d: "M21 12a9 9 0 11-18 0 9 9 0 0118 0z" })
-        );
-
-        const RefreshCw = ({ className }) => React.createElement('svg', { className, fill: "none", viewBox: "0 0 24 24", stroke: "currentColor" },
-          React.createElement('path', { strokeLinecap: "round", strokeLinejoin: "round", strokeWidth: 2, d: "M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" })
-        );
-
-        const Shield = ({ className }) => React.createElement('svg', { className, fill: "none", viewBox: "0 0 24 24", stroke: "currentColor" },
-          React.createElement('path', { strokeLinecap: "round", strokeLinejoin: "round", strokeWidth: 2, d: "M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" })
-        );
-
-        // Main Component
-        const AMLMonitoringSystem = () => {
-          const [transactionGraph, setTransactionGraph] = useState(null);
-          const [anomalies, setAnomalies] = useState([]);
-          const [selectedCase, setSelectedCase] = useState(null);
-          const [isAnalyzing, setIsAnalyzing] = useState(false);
-          const [activeView, setActiveView] = useState('overview');
-
-          const generateTransactionGraph = () => {
+        // Generate mock data
+        function generateData() {
             const entities = [
-              { id: 'E1', name: 'Account_Alpha', type: 'personal', risk: 0.22, country: 'US' },
-              { id: 'E2', name: 'ShellCo_Beta', type: 'shell', risk: 0.89, country: 'KY' },
-              { id: 'E3', name: 'Account_Gamma', type: 'personal', risk: 0.31, country: 'US' },
-              { id: 'E4', name: 'OffshoreHolding_Delta', type: 'shell', risk: 0.94, country: 'PA' },
-              { id: 'E5', name: 'Account_Epsilon', type: 'personal', risk: 0.15, country: 'UK' },
-              { id: 'E6', name: 'TradingCo_Zeta', type: 'business', risk: 0.48, country: 'SG' },
-              { id: 'E7', name: 'Account_Theta', type: 'personal', risk: 0.76, country: 'RU' },
-              { id: 'E8', name: 'CryptoExchange_Iota', type: 'business', risk: 0.68, country: 'MT' },
+                { id: 'E1', name: 'Account_Alpha', type: 'personal', risk: 0.22 },
+                { id: 'E2', name: 'ShellCo_Beta', type: 'shell', risk: 0.89 },
+                { id: 'E3', name: 'Account_Gamma', type: 'personal', risk: 0.31 },
+                { id: 'E4', name: 'OffshoreHolding_Delta', type: 'shell', risk: 0.94 },
+                { id: 'E5', name: 'Account_Epsilon', type: 'personal', risk: 0.15 },
+                { id: 'E6', name: 'TradingCo_Zeta', type: 'business', risk: 0.48 },
+                { id: 'E7', name: 'Account_Theta', type: 'personal', risk: 0.76 },
+                { id: 'E8', name: 'CryptoExchange_Iota', type: 'business', risk: 0.68 }
             ];
 
             const transactions = [
-              { from: 'E1', to: 'E2', amount: 50000, timestamp: '2024-01-15 09:30', suspicious: true },
-              { from: 'E2', to: 'E4', amount: 48500, timestamp: '2024-01-16 14:22', suspicious: true },
-              { from: 'E4', to: 'E6', amount: 47000, timestamp: '2024-01-17 11:45', suspicious: true },
-              { from: 'E3', to: 'E2', amount: 35000, timestamp: '2024-01-18 16:10', suspicious: true },
-              { from: 'E5', to: 'E6', amount: 15000, timestamp: '2024-01-19 10:05', suspicious: false },
-              { from: 'E6', to: 'E7', amount: 25000, timestamp: '2024-01-20 13:30', suspicious: true },
-              { from: 'E7', to: 'E8', amount: 24000, timestamp: '2024-01-21 08:45', suspicious: true },
-              { from: 'E1', to: 'E3', amount: 8000, timestamp: '2024-01-22 12:00', suspicious: false },
+                { from: 'E1', to: 'E2', amount: 50000, timestamp: '2024-01-15', suspicious: true },
+                { from: 'E2', to: 'E4', amount: 48500, timestamp: '2024-01-16', suspicious: true },
+                { from: 'E4', to: 'E6', amount: 47000, timestamp: '2024-01-17', suspicious: true },
+                { from: 'E3', to: 'E2', amount: 35000, timestamp: '2024-01-18', suspicious: true },
+                { from: 'E5', to: 'E6', amount: 15000, timestamp: '2024-01-19', suspicious: false },
+                { from: 'E6', to: 'E7', amount: 25000, timestamp: '2024-01-20', suspicious: true },
+                { from: 'E7', to: 'E8', amount: 24000, timestamp: '2024-01-21', suspicious: true }
             ];
 
             return { entities, transactions };
-          };
+        }
 
-          const detectAnomalies = (graph) => {
-            const detected = [];
-            
-            const pattern1 = {
-              id: 'A1',
-              type: 'Complex Layering Scheme',
-              severity: 'Critical',
-              riskScore: 0.93,
-              confidence: 0.87,
-              entities: ['E1', 'E2', 'E4', 'E6'],
-              totalAmount: 145500,
-              hops: 3,
-              description: 'Sophisticated fund layering through multiple shell companies',
-              indicators: [
-                'Sequential transactions within 72 hours',
-                'Multiple shell company intermediaries',
-                'Amount decay pattern (2-3% per hop)',
-                'Cross-border entities involved',
-                'High-risk jurisdictions detected'
-              ],
-              explanation: {
-                graphStructure: 'Linear chain with 3 high-risk nodes',
-                temporalPattern: 'Rapid succession with 24-48hr intervals',
-                amountPattern: 'Structured below CTR threshold',
-                entityRisk: 'Shell companies with minimal KYC'
-              }
-            };
+        function generateAnomalies() {
+            return [
+                {
+                    id: 'A001',
+                    type: 'Complex Layering Scheme',
+                    severity: 'Critical',
+                    riskScore: 0.93,
+                    entities: ['E1', 'E2', 'E4', 'E6'],
+                    totalAmount: 145500,
+                    hops: 3,
+                    description: 'Sophisticated fund layering through shell companies',
+                    indicators: [
+                        'Sequential transactions within 72 hours',
+                        'Multiple shell company intermediaries',
+                        'Amount decay pattern (2-3% per hop)',
+                        'Cross-border entities involved'
+                    ]
+                },
+                {
+                    id: 'A002',
+                    type: 'Smurfing Pattern',
+                    severity: 'High',
+                    riskScore: 0.78,
+                    entities: ['E3', 'E2', 'E7', 'E8'],
+                    totalAmount: 84000,
+                    hops: 3,
+                    description: 'Multiple deposits aggregated and moved to crypto',
+                    indicators: [
+                        'Multiple source accounts',
+                        'Aggregation at intermediary',
+                        'Final movement to crypto exchange',
+                        'Amounts below reporting threshold'
+                    ]
+                },
+                {
+                    id: 'A003',
+                    type: 'Round-Tripping',
+                    severity: 'Medium',
+                    riskScore: 0.65,
+                    entities: ['E5', 'E6'],
+                    totalAmount: 15000,
+                    hops: 1,
+                    description: 'Circular transaction pattern detected',
+                    indicators: [
+                        'Funds returning to origin',
+                        'Minimal value change',
+                        'Short time intervals'
+                    ]
+                }
+            ];
+        }
 
-            const pattern2 = {
-              id: 'A2',
-              type: 'Smurfing & Aggregation',
-              severity: 'High',
-              riskScore: 0.78,
-              confidence: 0.92,
-              entities: ['E3', 'E2', 'E7', 'E8'],
-              totalAmount: 84000,
-              hops: 3,
-              description: 'Multiple small deposits aggregated and moved to crypto',
-              indicators: [
-                'Multiple source accounts',
-                'Aggregation at intermediary',
-                'Final movement to crypto exchange',
-                'Amounts below reporting threshold',
-                'Coordinated timing pattern'
-              ],
-              explanation: {
-                graphStructure: 'Convergence pattern detected',
-                temporalPattern: 'Coordinated timing',
-                amountPattern: 'Structured deposits',
-                entityRisk: 'Crypto exchange endpoint'
-              }
-            };
+        function runAnalysis() {
+            const btn = document.getElementById('runBtn');
+            btn.disabled = true;
+            btn.textContent = '⏳ Analyzing...';
 
-            detected.push(pattern1, pattern2);
-            return detected;
-          };
+            // Clear current state
+            document.getElementById('anomalyList').innerHTML = '<div class="loading"><div class="spinner"></div><div>Running GNN analysis...</div></div>';
+            document.getElementById('detailsPanel').innerHTML = '<div class="loading"><div class="spinner"></div><div>Processing...</div></div>';
 
-          const runAnalysis = () => {
-            setIsAnalyzing(true);
             setTimeout(() => {
-              const graph = generateTransactionGraph();
-              setTransactionGraph(graph);
-              const detected = detectAnomalies(graph);
-              setAnomalies(detected);
-              setIsAnalyzing(false);
-              setSelectedCase(detected[0]);
+                // Generate data
+                transactionGraph = generateData();
+                anomalies = generateAnomalies();
+
+                // Update stats
+                document.getElementById('transactionCount').textContent = transactionGraph.transactions.length;
+                document.getElementById('anomalyCount').textContent = anomalies.length;
+                document.getElementById('entityCount').textContent = transactionGraph.entities.length;
+                document.getElementById('riskLevel').textContent = 'HIGH';
+
+                // Render anomalies
+                renderAnomalies();
+
+                // Select first anomaly
+                if (anomalies.length > 0) {
+                    selectAnomaly(anomalies[0]);
+                }
+
+                btn.disabled = false;
+                btn.textContent = '🔍 Run Analysis';
             }, 1500);
-          };
+        }
 
-          useEffect(() => {
-            runAnalysis();
-          }, []);
+        function renderAnomalies() {
+            const list = document.getElementById('anomalyList');
+            list.innerHTML = '';
 
-          const downloadReport = () => {
+            anomalies.forEach(anomaly => {
+                const card = document.createElement('div');
+                card.className = 'anomaly-card';
+                card.onclick = () => selectAnomaly(anomaly);
+                
+                card.innerHTML = `
+                    <div class="anomaly-header">
+                        <div class="anomaly-type">${anomaly.type}</div>
+                        <div class="severity-badge severity-${anomaly.severity.toLowerCase()}">${anomaly.severity}</div>
+                    </div>
+                    <div class="anomaly-description">${anomaly.description}</div>
+                    <div class="anomaly-footer">
+                        <span class="amount">$${anomaly.totalAmount.toLocaleString()}</span>
+                        <span class="risk-score">Risk: ${Math.round(anomaly.riskScore * 100)}%</span>
+                    </div>
+                `;
+                
+                list.appendChild(card);
+            });
+        }
+
+        function selectAnomaly(anomaly) {
+            selectedAnomaly = anomaly;
+            
+            // Update active state
+            document.querySelectorAll('.anomaly-card').forEach((card, index) => {
+                if (anomalies[index].id === anomaly.id) {
+                    card.classList.add('active');
+                } else {
+                    card.classList.remove('active');
+                }
+            });
+
+            // Render details
+            renderDetails(anomaly);
+        }
+
+        function renderDetails(anomaly) {
+            const panel = document.getElementById('detailsPanel');
+            
+            panel.innerHTML = `
+                <div class="detail-section">
+                    <h2 style="font-size: 1.5rem; font-weight: 700; margin-bottom: 0.5rem;">${anomaly.type}</h2>
+                    <p style="color: #94a3b8; margin-bottom: 1rem;">${anomaly.description}</p>
+                    
+                    <div class="metrics-grid">
+                        <div class="metric-card">
+                            <div class="metric-label">Risk Score</div>
+                            <div class="metric-value" style="color: #ef4444;">${Math.round(anomaly.riskScore * 100)}%</div>
+                        </div>
+                        <div class="metric-card">
+                            <div class="metric-label">Total Amount</div>
+                            <div class="metric-value" style="color: #10b981;">$${anomaly.totalAmount.toLocaleString()}</div>
+                        </div>
+                        <div class="metric-card">
+                            <div class="metric-label">Hops</div>
+                            <div class="metric-value" style="color: #3b82f6;">${anomaly.hops}</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="detail-section">
+                    <div class="detail-title">🎯 Detection Indicators</div>
+                    <div class="indicator-list">
+                        ${anomaly.indicators.map(ind => `<div class="indicator">• ${ind}</div>`).join('')}
+                    </div>
+                </div>
+
+                <div class="detail-section">
+                    <div class="detail-title">🔗 Involved Entities</div>
+                    <div class="indicator-list">
+                        ${anomaly.entities.map(entityId => {
+                            const entity = transactionGraph.entities.find(e => e.id === entityId);
+                            return entity ? `
+                                <div class="indicator">
+                                    <strong>${entity.name}</strong> - 
+                                    Type: ${entity.type} | 
+                                    Risk: ${Math.round(entity.risk * 100)}%
+                                </div>
+                            ` : '';
+                        }).join('')}
+                    </div>
+                </div>
+
+                <button class="export-btn" onclick="exportReport()">
+                    📊 Export SAR Report
+                </button>
+            `;
+        }
+
+        function exportReport() {
+            if (!selectedAnomaly) return;
+            
             const report = `
 ANTI-MONEY LAUNDERING CASE REPORT
-═══════════════════════════════════════════════════════════════════════
-Case ID: ${selectedCase.id}
-Type: ${selectedCase.type}
-Risk Score: ${(selectedCase.riskScore * 100).toFixed(1)}%
-Severity: ${selectedCase.severity}
+=====================================
+Case ID: ${selectedAnomaly.id}
+Type: ${selectedAnomaly.type}
+Severity: ${selectedAnomaly.severity}
+Risk Score: ${Math.round(selectedAnomaly.riskScore * 100)}%
+Total Amount: $${selectedAnomaly.totalAmount.toLocaleString()}
 
-EXECUTIVE SUMMARY
-─────────────────────────────────────────────────────────────────────
-${selectedCase.description}
+INDICATORS:
+${selectedAnomaly.indicators.map(ind => '- ' + ind).join('\n')}
 
-Total Amount: $${selectedCase.totalAmount.toLocaleString()}
-Transaction Hops: ${selectedCase.hops}
-Entities Involved: ${selectedCase.entities.join(', ')}
+ENTITIES INVOLVED:
+${selectedAnomaly.entities.join(', ')}
 
-DETECTION INDICATORS
-─────────────────────────────────────────────────────────────────────
-${selectedCase.indicators.map((ind, idx) => `${idx + 1}. ${ind}`).join('\n')}
-
-RECOMMENDED ACTIONS
-─────────────────────────────────────────────────────────────────────
-1. File Suspicious Activity Report (SAR)
-2. Freeze associated accounts
-3. Initiate enhanced due diligence
-4. Contact cross-border financial intelligence units
-
-═══════════════════════════════════════════════════════════════════════
-Generated: ${new Date().toISOString()}
+Generated: ${new Date().toLocaleString()}
 System: AML Neural Monitor v3.2.1
-═══════════════════════════════════════════════════════════════════════
-`;
+            `;
+            
             const blob = new Blob([report], { type: 'text/plain' });
-            const url = URL.createObjectURL(blob);
+            const url = window.URL.createObjectURL(blob);
             const a = document.createElement('a');
             a.href = url;
-            a.download = `AML_Report_${selectedCase.id}_${Date.now()}.txt`;
+            a.download = `SAR_Report_${selectedAnomaly.id}_${Date.now()}.txt`;
             a.click();
-          };
-
-          return React.createElement('div', { className: "min-h-screen bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900" },
-            // Header
-            React.createElement('header', { className: "bg-slate-900/80 backdrop-blur-xl border-b border-slate-700/50" },
-              React.createElement('div', { className: "max-w-7xl mx-auto px-4 sm:px-6 lg:px-8" },
-                React.createElement('div', { className: "flex items-center justify-between py-6" },
-                  React.createElement('div', { className: "flex items-center gap-4" },
-                    React.createElement(Shield, { className: "w-10 h-10 text-blue-500" }),
-                    React.createElement('div', null,
-                      React.createElement('h1', { className: "text-3xl font-bold text-white" }, "AML Neural Monitor"),
-                      React.createElement('p', { className: "text-sm text-gray-400" }, "Graph Neural Network Detection System")
-                    )
-                  ),
-                  React.createElement('div', { className: "flex items-center gap-4" },
-                    React.createElement('button', {
-                      onClick: runAnalysis,
-                      disabled: isAnalyzing,
-                      className: "flex items-center gap-2 bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 disabled:opacity-50 text-white px-6 py-3 rounded-lg font-semibold transition-all"
-                    },
-                      isAnalyzing ? 
-                        React.createElement(RefreshCw, { className: "w-5 h-5 animate-spin" }) :
-                        React.createElement(Play, { className: "w-5 h-5" }),
-                      isAnalyzing ? "Analyzing..." : "Run Analysis"
-                    )
-                  )
-                )
-              )
-            ),
+            window.URL.revokeObjectURL(url);
             
-            // Navigation
-            React.createElement('div', { className: "bg-slate-800/50 border-b border-slate-700/50" },
-              React.createElement('div', { className: "max-w-7xl mx-auto px-4 sm:px-6 lg:px-8" },
-                React.createElement('div', { className: "flex gap-6 py-4 overflow-x-auto" },
-                  ['overview', 'network', 'timeline'].map(view =>
-                    React.createElement('button', {
-                      key: view,
-                      onClick: () => setActiveView(view),
-                      className: `px-4 py-2 rounded-lg font-medium transition-all ${
-                        activeView === view 
-                          ? 'bg-gradient-to-r from-blue-600 to-purple-600 text-white' 
-                          : 'text-gray-400 hover:text-white hover:bg-slate-700'
-                      }`
-                    }, view.charAt(0).toUpperCase() + view.slice(1))
-                  )
-                )
-              )
-            ),
-            
-            // Main Content
-            React.createElement('div', { className: "max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8" },
-              // Stats Cards
-              React.createElement('div', { className: "grid grid-cols-1 md:grid-cols-4 gap-6 mb-8" },
-                [
-                  { label: 'Transactions', value: transactionGraph?.transactions.length || 0, color: 'from-blue-600 to-cyan-600' },
-                  { label: 'Anomalies', value: anomalies.length, color: 'from-red-600 to-orange-600' },
-                  { label: 'Entities', value: transactionGraph?.entities.length || 0, color: 'from-purple-600 to-pink-600' },
-                  { label: 'Risk Level', value: 'HIGH', color: 'from-yellow-600 to-red-600' }
-                ].map((stat, idx) =>
-                  React.createElement('div', { 
-                    key: idx,
-                    className: "bg-slate-800/50 backdrop-blur-xl border border-slate-700/50 rounded-xl p-6" 
-                  },
-                    React.createElement('div', { className: `text-3xl font-bold bg-gradient-to-r ${stat.color} bg-clip-text text-transparent mb-2` }, 
-                      stat.value
-                    ),
-                    React.createElement('div', { className: "text-gray-400" }, stat.label)
-                  )
-                )
-              ),
-              
-              // Main Grid
-              React.createElement('div', { className: "grid grid-cols-1 lg:grid-cols-3 gap-6" },
-                // Anomaly List
-                React.createElement('div', { className: "lg:col-span-1" },
-                  React.createElement('div', { className: "bg-slate-800/50 backdrop-blur-xl border border-slate-700/50 rounded-xl p-6" },
-                    React.createElement('h2', { className: "text-xl font-bold text-white mb-4 flex items-center gap-2" },
-                      React.createElement(AlertCircle, { className: "w-5 h-5 text-red-400" }),
-                      "Detected Anomalies"
-                    ),
-                    React.createElement('div', { className: "space-y-3" },
-                      anomalies.map((anomaly) =>
-                        React.createElement('div', {
-                          key: anomaly.id,
-                          onClick: () => setSelectedCase(anomaly),
-                          className: `p-4 rounded-lg cursor-pointer transition-all ${
-                            selectedCase?.id === anomaly.id
-                              ? 'bg-gradient-to-r from-blue-600 to-purple-600'
-                              : 'bg-slate-700/50 hover:bg-slate-700'
-                          }`
-                        },
-                          React.createElement('div', { className: "flex items-start justify-between mb-2" },
-                            React.createElement('span', { className: "text-white font-semibold" }, anomaly.type),
-                            React.createElement('span', {
-                              className: `px-2 py-1 rounded text-xs font-bold ${
-                                anomaly.severity === 'Critical' ? 'bg-red-500 text-white' : 'bg-yellow-500 text-black'
-                              }`
-                            }, anomaly.severity)
-                          ),
-                          React.createElement('div', { className: "text-sm text-gray-300 mb-2" }, anomaly.description),
-                          React.createElement('div', { className: "flex items-center justify-between text-xs" },
-                            React.createElement('span', { className: "text-gray-400" }, `$${anomaly.totalAmount.toLocaleString()}`),
-                            React.createElement('span', { className: "text-red-400 font-semibold" }, `Risk: ${(anomaly.riskScore * 100).toFixed(0)}%`)
-                          )
-                        )
-                      )
-                    )
-                  )
-                ),
-                
-                // Details Panel
-                React.createElement('div', { className: "lg:col-span-2" },
-                  selectedCase ? React.createElement('div', { className: "bg-slate-800/50 backdrop-blur-xl border border-slate-700/50 rounded-xl p-6" },
-                    React.createElement('div', { className: "flex items-start justify-between mb-6" },
-                      React.createElement('div', null,
-                        React.createElement('h2', { className: "text-2xl font-bold text-white mb-2" }, selectedCase.type),
-                        React.createElement('p', { className: "text-gray-300" }, selectedCase.description)
-                      ),
-                      React.createElement('button', {
-                        onClick: downloadReport,
-                        className: "flex items-center gap-2 bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-lg transition-colors"
-                      },
-                        React.createElement(FileText, { className: "w-5 h-5" }),
-                        "Export Report"
-                      )
-                    ),
-                    
-                    React.createElement('div', { className: "grid grid-cols-1 sm:grid-cols-3 gap-4 mb-6" },
-                      React.createElement('div', { className: "bg-slate-700/50 rounded-lg p-4" },
-                        React.createElement('div', { className: "text-gray-400 text-sm mb-1" }, "Risk Score"),
-                        React.createElement('div', { className: "text-2xl font-bold text-red-400" }, `${(selectedCase.riskScore * 100).toFixed(1)}%`)
-                      ),
-                      React.createElement('div', { className: "bg-slate-700/50 rounded-lg p-4" },
-                        React.createElement('div', { className: "text-gray-400 text-sm mb-1" }, "Total Amount"),
-                        React.createElement('div', { className: "text-2xl font-bold text-white" }, `$${selectedCase.totalAmount.toLocaleString()}`)
-                      ),
-                      React.createElement('div', { className: "bg-slate-700/50 rounded-lg p-4" },
-                        React.createElement('div', { className: "text-gray-400 text-sm mb-1" }, "Confidence"),
-                        React.createElement('div', { className: "text-2xl font-bold text-blue-400" }, `${(selectedCase.confidence * 100).toFixed(0)}%`)
-                      )
-                    ),
-                    
-                    React.createElement('div', null,
-                      React.createElement('h3', { className: "text-lg font-semibold text-white mb-3 flex items-center gap-2" },
-                        React.createElement(TrendingUp, { className: "w-5 h-5 text-yellow-400" }),
-                        "Detection Indicators"
-                      ),
-                      React.createElement('div', { className: "space-y-2" },
-                        selectedCase.indicators.map((indicator, idx) =>
-                          React.createElement('div', {
-                            key: idx,
-                            className: "bg-slate-700/30 border border-slate-600 rounded p-3 text-gray-300"
-                          },
-                            React.createElement('span', { className: "text-yellow-400 font-semibold mr-2" }, "•"),
-                            indicator
-                          )
-                        )
-                      )
-                    ),
-                    
-                    React.createElement('div', { className: "mt-6" },
-                      React.createElement('h3', { className: "text-lg font-semibold text-white mb-3 flex items-center gap-2" },
-                        React.createElement(Network, { className: "w-5 h-5 text-purple-400" }),
-                        "Graph Neural Network Analysis"
-                      ),
-                      React.createElement('div', { className: "grid grid-cols-1 sm:grid-cols-2 gap-4" },
-                        Object.entries(selectedCase.explanation).map(([key, value]) =>
-                          React.createElement('div', {
-                            key: key,
-                            className: "bg-gradient-to-br from-purple-900/30 to-blue-900/30 border border-purple-500/30 rounded-lg p-4"
-                          },
-                            React.createElement('div', { className: "text-purple-300 text-sm font-semibold mb-1" },
-                              key.replace(/([A-Z])/g, ' $1').trim()
-                            ),
-                            React.createElement('div', { className: "text-white" }, value)
-                          )
-                        )
-                      )
-                    )
-                  ) : React.createElement('div', { className: "bg-slate-800/50 backdrop-blur-xl border border-slate-700/50 rounded-xl p-12 text-center" },
-                    React.createElement(Shield, { className: "w-16 h-16 text-gray-600 mx-auto mb-4" }),
-                    React.createElement('h3', { className: "text-xl font-semibold text-gray-400 mb-2" }, "No Case Selected"),
-                    React.createElement('p', { className: "text-gray-500" }, "Select an anomaly from the list to view detailed analysis")
-                  )
-                )
-              )
-            )
-          );
-        };
+            alert('Report exported successfully!');
+        }
 
-        // Mount the app
-        const root = ReactDOM.createRoot(document.getElementById('root'));
-        root.render(React.createElement(AMLMonitoringSystem));
-        
-        // Hide loading screen
+        // Initialize on load
         window.addEventListener('load', () => {
-          setTimeout(() => {
-            const loadingScreen = document.getElementById('loading-screen');
-            loadingScreen.style.transition = 'opacity 0.5s';
-            loadingScreen.style.opacity = '0';
-            setTimeout(() => {
-              loadingScreen.style.display = 'none';
-            }, 500);
-          }, 1000);
+            setTimeout(runAnalysis, 500);
         });
     </script>
 </body>
