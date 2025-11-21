@@ -45,9 +45,7 @@ def init_db():
     """Initialize database schema"""
     with open("schema.sql", "r") as f:
         schema_sql = f.read()
-        # Split by semicolon to execute multiple statements
-        # Note: SQLite specific adjustments might be needed for complex SQL
-        # For this demo, we'll use pandas to write tables which is safer/easier
+        # Split by semicolon to execute multiple statements if needed
         pass
 
 def load_data_pipeline():
@@ -141,7 +139,7 @@ async def get_anomalies():
         query = "SELECT * FROM anomalies ORDER BY risk_score DESC LIMIT 50"
         df = pd.read_sql(query, engine)
         
-        # Convert JSON strings back to objects if necessary, or just return dict
+        # Convert JSON strings back to objects if necessary
         anomalies = []
         for _, row in df.iterrows():
             # Normalize data structure for frontend
@@ -154,7 +152,6 @@ async def get_anomalies():
                 "hops": int(row.get('hop_count', 0)),
                 "description": row.get('description', ''),
                 "entities": eval(row['entities']) if isinstance(row['entities'], str) else row['entities'],
-                # Mock indicators if not in DB, or extract from logic
                 "indicators": [f"Risk Score: {row.get('risk_score', 0):.2f}", "Pattern Detected via Graph Scan"]
             })
         return anomalies
@@ -167,7 +164,6 @@ async def get_graph_data(case_id: str):
     """Get graph nodes and edges for a specific case"""
     try:
         # 1. Get entities involved in the case
-        # This logic assumes case_id maps to pattern_id
         anomalies_df = pd.read_sql(f"SELECT * FROM anomalies WHERE pattern_id = '{case_id}'", engine)
         if anomalies_df.empty:
             raise HTTPException(status_code=404, detail="Case not found")
@@ -195,7 +191,7 @@ async def get_graph_data(case_id: str):
             WHERE from_entity_id IN ({placeholders}) 
             AND to_entity_id IN ({placeholders})
         """
-        # We need to pass the params twice because we used placeholders twice
+        # Params passed twice for the two placeholders
         tx_df = pd.read_sql(tx_query, engine, params=entity_ids + entity_ids)
         
         links = []
@@ -214,5 +210,9 @@ async def get_graph_data(case_id: str):
         print(e)
         raise HTTPException(status_code=500, detail=str(e))
 
+# --- CRITICAL UPDATE FOR RENDER DEPLOYMENT ---
 if __name__ == "__main__":
-    uvicorn.run(app, host="0.0.0.0", port=8000)
+    # Get the PORT from the environment variables, default to 10000
+    # Render automatically sets the 'PORT' environment variable
+    port = int(os.environ.get("PORT", 10000))
+    uvicorn.run(app, host="0.0.0.0", port=port)
